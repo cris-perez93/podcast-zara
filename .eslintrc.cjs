@@ -13,7 +13,7 @@ module.exports = {
         node: true
       },
       files: [
-        '.eslintrc.{js,cjs}'
+       [ '.eslintrc.{js,cjs}', 'jest.config.{js,cjs}', 'webpack.config.{js,cjs}']
       ],
       parserOptions: {
         sourceType: 'script'

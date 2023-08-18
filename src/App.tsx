@@ -1,10 +1,14 @@
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+
 function App () {
   return (
-    <>
-     <div>
-        <h1>React + Vite</h1>
-     </div>
-    </>
+    <Router>
+    <Routes>
+      <Route path="/" element={<Home/>} />
+      {/*<Route path="/podcast/:id" component={<PodcastDetail/>} />*/}
+    </Routes>
+  </Router>
   )
 }
 
