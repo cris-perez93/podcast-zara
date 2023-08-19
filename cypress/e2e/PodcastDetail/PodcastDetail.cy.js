@@ -27,12 +27,20 @@ it("debe mostrar los detalles del podcast", () => {
   // Verificar que el número de episodios está presente
   cy.get('[data-testid="podcast-episodes"]').should("exist");
 
-  // Verificar que al menos un episodio se muestra
-  cy.get("[data-testid='episode-card']").should("have.length.greaterThan", 0);
-
-  // Verificar que el enlace al detalle del episodio funciona
-  cy.get("[data-testid='episode-card']").first().click();
-
-  // Verificar que la URL cambia al detalle del episodio
-  cy.url().should("include", "/podcast/1493353598/episode/1000624751003");
+  // verificar que se muestra una tabla de episodios
+  cy.get('[data-testid="podcast-episodes-table"]').should("exist");
+  // verificar que se muestran los 10 primeros episodios
+  cy.get('[data-testid="podcast-episodes-table"] tbody tr').should(
+    "have.length",
+    10
+  );
+  // verificar que se muestra el título del episodio
+  cy.get(
+    '[data-testid="podcast-episodes-table"] tbody tr:first td:first'
+  ).should("contain", "BIG FACTS feat. ELDORADO RED");
+  // verificar que si le damos clic al título del episodio se navega a la página de detalles del episodio
+  cy.get(
+    '[data-testid="podcast-episodes-table"] tbody tr:first td:first'
+  ).click();
+  cy.url().should("include", "/podcast/1493353598/episode/1000624594388");
 });

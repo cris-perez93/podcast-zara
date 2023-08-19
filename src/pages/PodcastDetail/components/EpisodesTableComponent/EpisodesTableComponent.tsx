@@ -18,7 +18,10 @@ const EpisodeTableComponent: React.FC<EpisodeTableProps> = ({
 }) => {
   return (
     <div className="w-full mt-5 p-5 shadow-md">
-      <table className=" table-fixed w-full">
+      <table
+        data-testid="podcast-episodes-table"
+        className=" table-fixed w-full"
+      >
         <thead>
           <tr className="text-left">
             <th className="p-3  font-bold  border-b">Title</th>
@@ -29,10 +32,12 @@ const EpisodeTableComponent: React.FC<EpisodeTableProps> = ({
         <tbody>
           {episodes.map((episode, index) => (
             <tr
-              className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
+              className={`${
+                index % 2 === 0 ? "bg-white" : "bg-gray-100"
+              } hover:bg-gray-200 transition-all`}
               key={episode.id}
             >
-              <td className="p-3 border-b">
+              <td className="p-3 border-b hover:underline transition-all">
                 <Link to={`/podcast/${podcastId}/episode/${episode.id}`}>
                   {getCleanedTitle(episode.title)}
                 </Link>
