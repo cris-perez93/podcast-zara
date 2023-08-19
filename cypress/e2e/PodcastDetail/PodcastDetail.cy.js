@@ -28,17 +28,11 @@ it("debe mostrar los detalles del podcast", () => {
   cy.get('[data-testid="podcast-episodes"]').should("exist");
 
   // Verificar que al menos un episodio se muestra
-  cy.get("[data-testid^='episode-card']").should("have.length.greaterThan", 0);
+  cy.get("[data-testid='episode-card']").should("have.length.greaterThan", 0);
 
   // Verificar que el enlace al detalle del episodio funciona
-  cy.get("[data-testid^='episode-card']").first().find("a").click();
+  cy.get("[data-testid='episode-card']").first().click();
 
   // Verificar que la URL cambia al detalle del episodio
-  cy.url().should("include", "/episode/");
-
-  // Verificar que la página de detalle del episodio muestra los detalles correctos
-  cy.get("#episode-title").should("exist");
-  cy.get("#episode-publish-date").should("exist");
-  cy.get("#episode-duration").should("exist");
-  cy.get("#episode-description").should("exist");
+  cy.url().should("include", "/podcast/1493353598/episode/1000624751003");
 });

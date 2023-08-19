@@ -25,6 +25,10 @@ function App() {
               </Layout>
             }
           />
+          <Route
+            path="/podcast/:id/episode/:episodeId"
+            element={<div>hola worldddd</div>}
+          />
         </Routes>
       </Router>
     </PodcastProvider>

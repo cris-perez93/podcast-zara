@@ -1,13 +1,18 @@
 import { useParams } from "react-router-dom";
 import { useMutation } from "../../hooks/useMutation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePodcast } from "../../context/PodcastContext/PodcastContext";
+import EpisodeTableComponent from "./components/EpisodesTableComponent";
+import CardComponent from "./components/CardComponent";
 
 const PodcastDetail = () => {
   const { id } = useParams();
   const [fetchDetail] = useMutation(`/lookup`);
-
   const { podcastDetail, setPodcastDetail, podcasts } = usePodcast();
+  const [totalEpisodes, setTotalEpisodes] = useState(0);
+  const [visibleEpisodes, setVisibleEpisodes] = useState([] as any[]);
+  const [visibleCount, setVisibleCount] = useState(10); // Initial visible count
+  const episodesPerPage = 10;
 
   const getPodcastDetail = async () => {
     const { data, success } = await fetchDetail({
@@ -40,17 +45,21 @@ const PodcastDetail = () => {
               date: episode.releaseDate,
               duration: episode.trackTimeMillis,
               title: episode.trackName,
-              audio: episode.previewUrl,
+              audio: episode?.previewUrl,
+              id: episode.trackId,
             };
           });
+          setTotalEpisodes(episodes.length);
           // filtrar solo los episodios que no tengan audo undefined
           const episodesWithAudio = episodes.filter(
             (episode: any) => episode.audio !== undefined
           );
           setPodcastDetail((prevState: any) => ({
             ...prevState,
-            episodesWithAudio,
+            // guardar solo los 10 primeros episodios
+            episodes: episodesWithAudio,
           }));
+          setVisibleEpisodes(episodesWithAudio.slice(0, visibleCount));
         }
       }
     }
@@ -62,28 +71,52 @@ const PodcastDetail = () => {
     }
   }, [podcasts]);
 
+  const loadMoreEpisodes = () => {
+    setVisibleCount(visibleCount + episodesPerPage);
+    setVisibleEpisodes(
+      podcastDetail.episodes.slice(0, visibleCount + episodesPerPage)
+    );
+  };
+
   return (
-    <div className="py-10 flex">
+    <div className="py-10 flex gap-14 ">
       {podcastDetail && (
         <>
-          <div className=" p-5 shadow-md">
-            <img
-              src={podcastDetail.artworkUrl100}
-              alt={`${podcastDetail.name} Artwork`}
-              data-testid="podcast-image"
+          <div className=" flex flex-col items-center">
+            <CardComponent
+              artworkUrl600={podcastDetail.artworkUrl600}
+              name={podcastDetail.name}
+              author={podcastDetail.author}
+              description={podcastDetail.description}
             />
-            <p data-testid="podcast-name">{podcastDetail.name}</p>
-            <p data-testid="podcast-author">{podcastDetail.author}</p>
-            <div data-testid="description">
-              <p>Description:</p>
-              <p data-testid="podcast-description">
-                {podcastDetail.description}
+          </div>
+          <div className="w-full">
+            <div className="flex font-bold w-full shadow-md py-2 px-3 text-xl gap-2">
+              <h2>Episodes:</h2>
+              <p data-testid="podcast-episodes">
+                {totalEpisodes && totalEpisodes}
               </p>
             </div>
-            {/* Agrega otros elementos con los atributos del podcast */}
-          </div>
-          <div>
-            <h2>Episodes</h2>
+            <div>
+              {visibleEpisodes && (
+                <>
+                  <EpisodeTableComponent
+                    episodes={visibleEpisodes}
+                    podcastId={id as string}
+                  />
+                  <div className="w-full flex justify-center">
+                    {visibleCount < totalEpisodes && (
+                      <button
+                        className=" uppercase text-center text-blue-400 underline font-semibold py-2 px-4 rounded"
+                        onClick={loadMoreEpisodes}
+                      >
+                        {`Load More Episodes (${visibleCount}/${totalEpisodes})`}
+                      </button>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </>
       )}
