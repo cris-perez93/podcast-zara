@@ -1,17 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
-
-interface IPodcast {
-  id: string;
-  name: string;
-  artist: string;
-  image: string;
-}
+import { usePodcast } from "../../context/PodcastContext/PodcastContext";
 
 const Home = () => {
   // Almacenamos los podcasts en el estado
-  const [podcasts, setPodcasts] = useState<IPodcast[]>([]);
+  const { podcasts, setPodcasts } = usePodcast();
   // Almacenamos el término de búsqueda en el estado
   const [searchTerm, setSearchTerm] = useState<string>("");
   // Agarramos el último tiempo de actualización de localStorage en el caso de que exista o lo inicializamos a null
@@ -37,13 +31,15 @@ const Home = () => {
         const podcastEntries = data.feed.entry.map((entry: any) => {
           const id = entry.id.attributes["im:id"];
           const name = entry["im:name"].label;
-          const artist = entry["im:artist"].label;
+          const author = entry["im:artist"].label;
           const image = entry["im:image"][2].label;
+          const description = entry.summary.label;
           return {
             id,
             name,
-            artist,
+            author,
             image,
+            description,
           };
         });
         setPodcasts(podcastEntries);
@@ -76,7 +72,7 @@ const Home = () => {
   const filteredPodcasts = podcasts.filter(
     (podcast) =>
       podcast.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      podcast.artist.toLowerCase().includes(searchTerm.toLowerCase())
+      podcast.author.toLowerCase().includes(searchTerm.toLowerCase())
   );
   // agregar animación cada vez que se filtra un podcast
   useEffect(() => {
@@ -93,6 +89,7 @@ const Home = () => {
       <div className=" flex justify-end py-5 w-full m-auto">
         <input
           type="text"
+          data-testid="search-input"
           className="border px-2 border-gray-300 outline-none rounded-sm p-1"
           placeholder="Filter podcasts..."
           value={searchTerm}
@@ -105,7 +102,10 @@ const Home = () => {
       >
         {filteredPodcasts.map((podcast) => (
           <Link key={podcast.id} to={`/podcast/${podcast.id}`}>
-            <li className="flex mt-32 bg-white hover:-translate-y-2 transition-all px-5 py-2 flex-col relative min-h-[180px] m-auto shadow-md w-[260px] rounded-sm items-center justify-center">
+            <li
+              data-testid={`podcast-card-${podcast.id}`}
+              className="flex mt-32 bg-white hover:-translate-y-2 transition-all px-5 py-2 flex-col relative min-h-[180px] m-auto shadow-md w-[260px] rounded-sm items-center justify-center"
+            >
               <img
                 className="m-auto w-28 absolute -top-20 left-1/2 transform -translate-x-1/2 rounded-full"
                 src={podcast.image}
@@ -113,7 +113,7 @@ const Home = () => {
               />
               <div className="text-center mt-10">
                 <h2 className="uppercase font-medium">{podcast.name}</h2>
-                <p className="text-gray-400">Author:{podcast.artist}</p>
+                <p className="text-gray-400">Author:{podcast.author}</p>
               </div>
             </li>
           </Link>
