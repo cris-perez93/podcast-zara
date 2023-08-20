@@ -1,6 +1,5 @@
 import { useMutation } from "../../../hooks/useMutation";
 import { useState } from "react";
-import { IPodcast } from "../../../types/CommonTypes";
 import { usePodcast } from "../../../context/PodcastContext/PodcastContext";
 
 const useListPodcast = () => {
@@ -42,6 +41,9 @@ const useListPodcast = () => {
         localStorage.getItem("cachedPodcasts") || ""
       );
       setPodcasts(cachedPodcasts);
+      if (error) {
+        console.log(error);
+      }
     }
   };
 

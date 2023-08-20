@@ -11,7 +11,7 @@ interface usePodcastDetailProps {
 
 /**
  * @description This hook is used to get the podcast detail
- * @param id
+ * @param id Podcast id
  **/
 
 const usePodcastDetail = ({ id }: usePodcastDetailProps) => {
@@ -21,6 +21,7 @@ const usePodcastDetail = ({ id }: usePodcastDetailProps) => {
   const [visibleCount, setVisibleCount] = useState(10); // Initial visible count
   const [fetchDetailPodcast, isLoading] = useMutation(`/lookup`);
 
+  // get the podcast detail
   const getPodcastDetail = async () => {
     const { success, data } = await fetchDetailPodcast({
       method: "get",

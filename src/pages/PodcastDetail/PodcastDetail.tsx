@@ -12,9 +12,8 @@ interface PodcastDetailProps {
 }
 
 /**
- *
- * @param episodeDetail
  * @description This component is used to show the podcast detail and the episodes of the podcast
+ * @param episodeDetail If true, show the episode detail
  */
 const PodcastDetail = ({ episodeDetail }: PodcastDetailProps) => {
   const { id, episodeId } = useParams();

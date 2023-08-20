@@ -7,7 +7,7 @@ interface LayoutProps {
 
 function Layout({ children }: LayoutProps) {
   return (
-    <div className="container m-auto  py-20 px-40">
+    <div className="container m-auto  sm:py-20 sm:px-40 py-10 px-5">
       <Header />
       <main>{children}</main>
     </div>

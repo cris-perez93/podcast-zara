@@ -5,6 +5,14 @@ interface CardComponentProps {
   description: string;
 }
 
+/**
+ * @description This component is used to render the podcast card
+ * @param artworkUrl600 Podcast image
+ * @param name Podcast name
+ * @param author Podcast author
+ * @param description Podcast description
+ */
+
 const CardComponent: React.FC<CardComponentProps> = ({
   author,
   description,

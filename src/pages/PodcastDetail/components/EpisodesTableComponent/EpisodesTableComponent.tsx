@@ -13,6 +13,13 @@ type EpisodeTableProps = {
   totalEpisodes?: number;
 };
 
+/**
+ * @description This component is used to render the episodes table
+ * @param episodes List of episodes
+ * @param podcastId Podcast id
+ * @param totalEpisodes Total number of episodes
+ */
+
 const EpisodeTableComponent: React.FC<EpisodeTableProps> = ({
   episodes,
   podcastId,

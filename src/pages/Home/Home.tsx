@@ -5,6 +5,10 @@ import { usePodcast } from "../../context/PodcastContext/PodcastContext";
 import useListPodcast from "./hooks/useListPodcast";
 import Loading from "../../components/Loading";
 
+/**
+ * @description This component is used to show the list of podcasts
+ */
+
 const Home = () => {
   const { podcasts } = usePodcast();
   // Almacenamos el término de búsqueda en el estado
@@ -28,6 +32,7 @@ const Home = () => {
       podcast.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       podcast.author.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
   // agregar animación cada vez que se filtra un podcast
   useEffect(() => {
     if (divRef.current) {
@@ -39,25 +44,25 @@ const Home = () => {
   }, [filteredPodcasts]);
 
   return (
-    <div className="flex flex-col  py-5  px-5  w-full mx-auto ">
+    <div className="flex flex-col w-full mx-auto ">
       {loading && <Loading />}
-      {filteredPodcasts.length > 0 && (
-        <div className=" flex justify-end py-5 w-full m-auto">
-          <input
-            type="text"
-            data-testid="search-input"
-            className="border px-2 border-gray-300 outline-none rounded-sm p-1"
-            placeholder="Filter podcasts..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-      )}
+
+      <div className=" flex sm:justify-end justify-center py-5 w-full m-auto">
+        <input
+          type="text"
+          data-testid="search-input"
+          className="border px-2 border-gray-300 outline-none rounded-sm p-1"
+          placeholder="Filter podcasts..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       <ul
         ref={divRef}
-        className="xl:grid xl:grid-cols-4 flex justify-center flex-wrap min-w-full m-auto gap-5 mt-10"
+        className=" flex flex-wrap sm:justify-around justify-center min-w-full m-auto gap-5 mt-10"
       >
-        {filteredPodcasts &&
+        {filteredPodcasts && filteredPodcasts.length > 0 ? (
           filteredPodcasts.map((podcast) => (
             <Link key={podcast.id} to={`/podcast/${podcast.id}`}>
               <li
@@ -75,7 +80,13 @@ const Home = () => {
                 </div>
               </li>
             </Link>
-          ))}
+          ))
+        ) : (
+          <div className="flex flex-col justify-center absolute left-1/2 transform -translate-x-1/2 items-center">
+            <p className="text-2xl font-bold">No results found</p>
+            <p className="text-gray-400">Try different keywords</p>
+          </div>
+        )}
       </ul>
     </div>
   );
