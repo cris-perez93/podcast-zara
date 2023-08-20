@@ -1,8 +1,12 @@
+import { Link } from "react-router-dom";
+
 function Header() {
   return (
-    <header className="px-10">
+    <header className="">
       <div className="border-b py-1 w-full">
-        <h1 className="text-sky-800 font-bold">Podcaster</h1>
+        <Link to="/">
+          <h1 className="text-sky-800 text-lg font-bold">Podcaster</h1>
+        </Link>
       </div>
     </header>
   );

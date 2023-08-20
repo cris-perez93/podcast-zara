@@ -56,14 +56,12 @@ const PodcastDetail = ({ episodeDetail }: PodcastDetailProps) => {
       {podcastDetail && !loading && (
         <>
           <div className=" flex flex-col items-center">
-            <Link to="/">
-              <CardComponent
-                artworkUrl600={podcastDetail.image}
-                name={podcastDetail.name}
-                author={podcastDetail.author}
-                description={podcastDetail.description}
-              />
-            </Link>
+            <CardComponent
+              artworkUrl600={podcastDetail.image}
+              name={podcastDetail.name}
+              author={podcastDetail.author}
+              description={podcastDetail.description}
+            />
           </div>
           {episodeDetail && currentEpisode && (
             <DetailEpisodeComponent

@@ -1,4 +1,5 @@
 import { getCleanedTitle } from "../../../../utils/formats";
+import DOMPurify from "dompurify";
 
 interface DetailEpisodeComponentProps {
   title: string;
@@ -17,9 +18,11 @@ const DetailEpisodeComponent: React.FC<DetailEpisodeComponentProps> = ({
         <h1 data-testid="episode-title" className="text-2xl font-bold mb-5">
           {title && getCleanedTitle(title)}
         </h1>
-        <p data-testid="episode-description" className="mb-5 italic">
-          {description}
-        </p>
+        <p
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description) }}
+          data-testid="episode-description"
+          className="mb-5 italic"
+        />
       </div>
       <audio
         data-testid="audio-player"
