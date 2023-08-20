@@ -3,7 +3,8 @@ export interface IEpisode {
   duration: number;
   title: string;
   audio: string;
-  id: string;
+  id: string | number;
+  description: string;
 }
 
 export interface IPodcast {
@@ -12,6 +13,5 @@ export interface IPodcast {
   description: string;
   image: string;
   author: string;
-  artworkUrl600: string;
   episodes: IEpisode[];
 }

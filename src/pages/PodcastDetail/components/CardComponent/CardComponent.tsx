@@ -1,5 +1,3 @@
-import React, { useRef, useState, useEffect } from "react";
-
 interface CardComponentProps {
   artworkUrl600: string;
   name: string;
@@ -18,6 +16,10 @@ const CardComponent: React.FC<CardComponentProps> = ({
       <img
         src={artworkUrl600}
         width={200}
+        onError={(e) => {
+          e.currentTarget.src =
+            "https://www.freeiconspng.com/uploads/no-image-icon-4.png";
+        }}
         alt={`${name} Artwork`}
         data-testid="podcast-image"
       />
@@ -25,17 +27,18 @@ const CardComponent: React.FC<CardComponentProps> = ({
         <p className="font-bold" data-testid="podcast-name">
           {name}
         </p>
-        <p className="italic" data-testid="podcast-author">
-          by {author}
-        </p>
+        {author && author.length > 0 && (
+          <p className="italic" data-testid="podcast-author">
+            by {author}
+          </p>
+        )}
       </div>
-      <div data-testid="description">
-        <p className="font-semibold">Description:</p>
+      <div className="max-w-full break-words" data-testid="description">
+        {description && <p className="font-semibold">Description:</p>}
         <p className="italic" data-testid="podcast-description">
           {description}
         </p>
       </div>
-      {/* Agrega otros elementos con los atributos del podcast */}
     </div>
   );
 };

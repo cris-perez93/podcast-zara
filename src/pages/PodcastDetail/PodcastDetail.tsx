@@ -1,123 +1,103 @@
 import { useParams } from "react-router-dom";
-import { useMutation } from "../../hooks/useMutation";
 import { useEffect, useState } from "react";
-import { usePodcast } from "../../context/PodcastContext/PodcastContext";
 import EpisodeTableComponent from "./components/EpisodesTableComponent";
 import CardComponent from "./components/CardComponent";
+import { IEpisode } from "../../types/CommonTypes";
+import { getCleanedTitle } from "../../utils/formats";
+import Loading from "../../components/Loading";
+import usePodcastDetail from "./hooks/usePodcastDetail";
 
-const PodcastDetail = () => {
-  const { id } = useParams();
-  const [fetchDetail] = useMutation(`/lookup`);
-  const { podcastDetail, setPodcastDetail, podcasts } = usePodcast();
-  const [totalEpisodes, setTotalEpisodes] = useState(0);
-  const [visibleEpisodes, setVisibleEpisodes] = useState([] as any[]);
-  const [visibleCount, setVisibleCount] = useState(10); // Initial visible count
-  const episodesPerPage = 10;
+interface PodcastDetailProps {
+  episodeDetail?: boolean;
+}
 
-  const getPodcastDetail = async () => {
-    const { data, success } = await fetchDetail({
-      method: "get",
-      addToURL: `?id=${id}`,
-    });
-    if (success && data) {
-      const currentPodcast = podcasts?.find(
-        (podcast: any) => podcast.id === id
-      );
-      const description = currentPodcast?.description;
-      const NewPodcastDetail = {
-        ...data.results[0],
-        name: data.results[0].trackName,
-        author: data.results[0].artistName,
-        description,
-      };
-      setPodcastDetail(NewPodcastDetail);
-      // Obtener los episodios del podcast a través de collectionViewUrl
-      if (data.results[0].collectionViewUrl) {
-        const { data: episodesData, success: episodesSuccess } =
-          await fetchDetail({
-            method: "get",
-            addToURL: `?id=${data.results[0].collectionId}&country=US&media=podcast&entity=podcastEpisode&limit=100`,
-          });
-        if (episodesSuccess && episodesData) {
-          // guardar la informacion que necesitamos de los episodios
-          const episodes = episodesData.results.map((episode: any) => {
-            return {
-              date: episode.releaseDate,
-              duration: episode.trackTimeMillis,
-              title: episode.trackName,
-              audio: episode?.previewUrl,
-              id: episode.trackId,
-            };
-          });
-          setTotalEpisodes(episodes.length);
-          // filtrar solo los episodios que no tengan audo undefined
-          const episodesWithAudio = episodes.filter(
-            (episode: any) => episode.audio !== undefined
-          );
-          setPodcastDetail((prevState: any) => ({
-            ...prevState,
-            // guardar solo los 10 primeros episodios
-            episodes: episodesWithAudio,
-          }));
-          setVisibleEpisodes(episodesWithAudio.slice(0, visibleCount));
-        }
-      }
-    }
-  };
+/**
+ *
+ * @param episodeDetail
+ * @description This component is used to show the podcast detail and the episodes of the podcast
+ */
+const PodcastDetail = ({ episodeDetail }: PodcastDetailProps) => {
+  const { id, episodeId } = useParams();
+  const [currentEpisode, setCurrentEpisode] = useState({} as IEpisode);
 
+  const {
+    getPodcastDetail, // get the podcast detail
+    podcastDetail, // podcast detail
+    totalEpisodes, // total episodes of the podcast
+    visibleEpisodes, // visible episodes of the podcast
+    visibleCount, // visible count of the episodes
+    onLoadMoreEpisodes, // load more episodes
+    loading, // loading state
+  } = usePodcastDetail({ id: id as string });
+
+  /**
+   * @description This effect is used to get the podcast detail
+   */
   useEffect(() => {
-    if (podcasts.length > 0) {
-      getPodcastDetail();
-    }
-  }, [podcasts]);
+    getPodcastDetail();
+  }, []);
 
-  const loadMoreEpisodes = () => {
-    setVisibleCount(visibleCount + episodesPerPage);
-    setVisibleEpisodes(
-      podcastDetail.episodes.slice(0, visibleCount + episodesPerPage)
-    );
-  };
+  /**
+   * @description This effect is used to get the current episode detail
+   */
+  useEffect(() => {
+    if (episodeDetail && podcastDetail.episodes && episodeId) {
+      const idEpisode = parseFloat(episodeId);
+      const currentEpisode = podcastDetail.episodes.find(
+        (episode: IEpisode) => episode.id === idEpisode
+      );
+      setCurrentEpisode(currentEpisode as IEpisode);
+    }
+  }, [podcastDetail, episodeId]);
 
   return (
-    <div className="py-10 flex gap-14 ">
-      {podcastDetail && (
+    <div className="py-5 flex gap-14 items-start justify-center ">
+      {loading && <Loading />}
+      {podcastDetail && !loading && (
         <>
           <div className=" flex flex-col items-center">
             <CardComponent
-              artworkUrl600={podcastDetail.artworkUrl600}
+              artworkUrl600={podcastDetail.image}
               name={podcastDetail.name}
               author={podcastDetail.author}
               description={podcastDetail.description}
             />
           </div>
-          <div className="w-full">
-            <div className="flex font-bold w-full shadow-md py-2 px-3 text-xl gap-2">
-              <h2>Episodes:</h2>
-              <p data-testid="podcast-episodes">
-                {totalEpisodes && totalEpisodes}
-              </p>
+          {episodeDetail && currentEpisode && (
+            <div className="flex flex-col w-full shadow-md  px-5 pt-5 justify-evenly">
+              <div>
+                <h1 className="text-2xl font-bold mb-5">
+                  {currentEpisode?.title &&
+                    getCleanedTitle(currentEpisode.title)}
+                </h1>
+                <p className="mb-5 italic">{currentEpisode.description}</p>
+              </div>
+              <audio
+                className="mb-5 w-full"
+                src={currentEpisode.audio}
+                controls
+              ></audio>
             </div>
-            <div>
-              {visibleEpisodes && (
-                <>
-                  <EpisodeTableComponent
-                    episodes={visibleEpisodes}
-                    podcastId={id as string}
-                  />
-                  <div className="w-full flex justify-center">
-                    {visibleCount < totalEpisodes && (
-                      <button
-                        className=" uppercase text-center text-blue-400 underline font-semibold py-2 px-4 rounded"
-                        onClick={loadMoreEpisodes}
-                      >
-                        {`Load More Episodes (${visibleCount}/${totalEpisodes})`}
-                      </button>
-                    )}
-                  </div>
-                </>
-              )}
+          )}
+          {!episodeDetail && visibleEpisodes && (
+            <div className="flex flex-col">
+              <EpisodeTableComponent
+                episodes={visibleEpisodes}
+                podcastId={id as string}
+                totalEpisodes={totalEpisodes}
+              />
+              <div className="w-full flex justify-center">
+                {visibleCount < totalEpisodes && (
+                  <button
+                    className=" uppercase text-center text-blue-400 underline font-semibold py-2 px-4 rounded"
+                    onClick={onLoadMoreEpisodes}
+                  >
+                    {`Load More Episodes (${visibleCount}/${totalEpisodes})`}
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </>
       )}
     </div>
