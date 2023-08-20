@@ -1,27 +1,53 @@
-# React + TypeScript + Vite
+# Mi Aplicación Podcast
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Bienvenido a la aplicación Podcast, desarrollada utilizando tecnologías modernas como React, Vite, Tailwind CSS, React Router DOM, DOMPurify y TypeScript. Esta aplicación te permite explorar y descubrir podcasts interesantes.
 
-Currently, two official plugins are available:
+## Cómo Ejecutar la Aplicación
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Modo Desarrollo
 
-## Expanding the ESLint configuration
+En el modo de desarrollo, puedes trabajar y depurar la aplicación sin preocuparte por la optimización de activos.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+1. Clona este repositorio en tu máquina local.
+2. Abre una terminal en el directorio del proyecto.
+3. Ejecuta el siguiente comando para instalar las dependencias:
+```bash
+   npm install
+```
+4. Luego, inicia el servidor de desarrollo
+```bash
+   npm run dev
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Modo Produccón
+
+En el modo producción , los activos se optimizan y se sirven de manera eficiente para los usuarios finales.
+1. Clona este repositorio en tu máquina local.
+2. Abre una terminal en el directorio del proyecto.
+3. Ejecuta el siguiente comando para instalar las dependencias:
+ ```bash
+   npm install
+```
+4. Luego compila la aplicación para producción:
+```bash
+npm run build
+npm vite preview
+```
+
+## Cómo Ejecutar las pruebas Cypress
+Este proyecto incluye pruebas de extremo a extremo utilizando Cypress. Para ejecutar las pruebas:
+
+Asegúrate de haber seguido los pasos anteriores para instalar las dependencias.
+
+Abre una terminal en el directorio del proyecto.
+
+1. Ejecuta el siguiente comando para iniciar el servidor de desarrollo:
+```bash
+npm run dev
+```
+2. En otra terminal, abre la interfaz de Cypress:
+```bash
+npx cypress open
+```
+3. Accede a la interfaz y elige el navegador donde se realizarán las pruebas.
+
