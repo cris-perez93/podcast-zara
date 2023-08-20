@@ -6,6 +6,8 @@ import { IEpisode } from "../../types/CommonTypes";
 import { getCleanedTitle } from "../../utils/formats";
 import Loading from "../../components/Loading";
 import usePodcastDetail from "./hooks/usePodcastDetail";
+import { Link } from "react-router-dom";
+import DetailEpisodeComponent from "./components/DetailEpisodeComponent";
 
 interface PodcastDetailProps {
   episodeDetail?: boolean;
@@ -55,34 +57,21 @@ const PodcastDetail = ({ episodeDetail }: PodcastDetailProps) => {
       {podcastDetail && !loading && (
         <>
           <div className=" flex flex-col items-center">
-            <CardComponent
-              artworkUrl600={podcastDetail.image}
-              name={podcastDetail.name}
-              author={podcastDetail.author}
-              description={podcastDetail.description}
-            />
+            <Link to="/">
+              <CardComponent
+                artworkUrl600={podcastDetail.image}
+                name={podcastDetail.name}
+                author={podcastDetail.author}
+                description={podcastDetail.description}
+              />
+            </Link>
           </div>
           {episodeDetail && currentEpisode && (
-            <div className="flex flex-col w-full shadow-md  px-5 pt-5 justify-evenly">
-              <div>
-                <h1
-                  data-testid="episode-title"
-                  className="text-2xl font-bold mb-5"
-                >
-                  {currentEpisode?.title &&
-                    getCleanedTitle(currentEpisode.title)}
-                </h1>
-                <p data-testid="episode-description" className="mb-5 italic">
-                  {currentEpisode.description}
-                </p>
-              </div>
-              <audio
-                data-testid="audio-player"
-                className="mb-5 w-full"
-                src={currentEpisode.audio}
-                controls
-              ></audio>
-            </div>
+            <DetailEpisodeComponent
+              title={currentEpisode.title}
+              description={currentEpisode.description}
+              audio={currentEpisode.audio}
+            />
           )}
           {!episodeDetail && visibleEpisodes && (
             <div className="flex flex-col">
