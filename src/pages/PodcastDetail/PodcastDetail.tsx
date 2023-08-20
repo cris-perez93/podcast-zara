@@ -65,13 +65,19 @@ const PodcastDetail = ({ episodeDetail }: PodcastDetailProps) => {
           {episodeDetail && currentEpisode && (
             <div className="flex flex-col w-full shadow-md  px-5 pt-5 justify-evenly">
               <div>
-                <h1 className="text-2xl font-bold mb-5">
+                <h1
+                  data-testid="episode-title"
+                  className="text-2xl font-bold mb-5"
+                >
                   {currentEpisode?.title &&
                     getCleanedTitle(currentEpisode.title)}
                 </h1>
-                <p className="mb-5 italic">{currentEpisode.description}</p>
+                <p data-testid="episode-description" className="mb-5 italic">
+                  {currentEpisode.description}
+                </p>
               </div>
               <audio
+                data-testid="audio-player"
                 className="mb-5 w-full"
                 src={currentEpisode.audio}
                 controls
