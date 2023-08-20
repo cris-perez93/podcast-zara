@@ -5,7 +5,6 @@ import CardComponent from "./components/CardComponent";
 import { IEpisode } from "../../types/CommonTypes";
 import Loading from "../../components/Loading";
 import usePodcastDetail from "./hooks/usePodcastDetail";
-import { Link } from "react-router-dom";
 import DetailEpisodeComponent from "./components/DetailEpisodeComponent";
 
 interface PodcastDetailProps {

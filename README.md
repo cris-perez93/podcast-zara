@@ -18,7 +18,6 @@ En el modo de desarrollo, puedes trabajar y depurar la aplicación sin preocupar
 ```bash
    npm run dev
 ```
-5. Abre tu navegador y accede a http://localhost:5173
 
 ### Modo Produccón
 
@@ -32,13 +31,8 @@ En el modo producción , los activos se optimizan y se sirven de manera eficient
 4. Luego compila la aplicación para producción:
 ```bash
 npm run build
+npm vite preview
 ```
-5. Después de compilar, puedes iniciar un servidor estático para servir la aplicación:
-```bash
-npm install -g serve # Instala el paquete serve globalmente
-serve dist           # Sirve la aplicación compliada en http://localhost:5000
-```
-
 
 ## Cómo Ejecutar las pruebas Cypress
 Este proyecto incluye pruebas de extremo a extremo utilizando Cypress. Para ejecutar las pruebas:
