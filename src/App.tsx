@@ -1,12 +1,9 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import { PodcastProvider } from "./context/PodcastContext/PodcastContext";
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 import Loading from "./components/Loading";
-
-// Lazy load components
-const Home = lazy(() => import("./pages/Home"));
-const PodcastDetail = lazy(() => import("./pages/PodcastDetail/PodcastDetail"));
+import routes from "./infrasturcture/routes/routes";
 
 function App() {
   return (
@@ -20,30 +17,13 @@ function App() {
           }
         >
           <Routes>
-            <Route
-              path="/"
-              element={
-                <Layout>
-                  <Home />
-                </Layout>
-              }
-            />
-            <Route
-              path="/podcast/:id"
-              element={
-                <Layout>
-                  <PodcastDetail />
-                </Layout>
-              }
-            />
-            <Route
-              path="/podcast/:id/episode/:episodeId"
-              element={
-                <Layout>
-                  <PodcastDetail episodeDetail={true} />
-                </Layout>
-              }
-            />
+            {routes.map((route, index) => (
+              <Route
+                key={index}
+                path={route.path}
+                element={<Layout>{route.element}</Layout>}
+              />
+            ))}
           </Routes>
         </Suspense>
       </Router>
