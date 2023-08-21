@@ -62,31 +62,31 @@ const Home = () => {
         ref={divRef}
         className=" flex flex-wrap sm:justify-around justify-center min-w-full m-auto gap-5 mt-10"
       >
-        {filteredPodcasts && filteredPodcasts.length > 0 ? (
-          filteredPodcasts.map((podcast) => (
-            <Link key={podcast.id} to={`/podcast/${podcast.id}`}>
-              <li
-                data-testid={`podcast-card-${podcast.id}`}
-                className="flex mt-32 bg-white hover:-translate-y-2 transition-all px-5 py-2 flex-col relative min-h-[180px] m-auto shadow-md w-[260px] rounded-sm items-center justify-center"
-              >
-                <img
-                  className="m-auto w-28 absolute -top-20 left-1/2 transform -translate-x-1/2 rounded-full"
-                  src={podcast.image}
-                  alt={podcast.name}
-                />
-                <div className="text-center mt-10">
-                  <h2 className="uppercase font-medium">{podcast.name}</h2>
-                  <p className="text-gray-400">Author:{podcast.author}</p>
-                </div>
-              </li>
-            </Link>
-          ))
-        ) : (
-          <div className="flex flex-col justify-center absolute left-1/2 transform -translate-x-1/2 items-center">
-            <p className="text-2xl font-bold">No results found</p>
-            <p className="text-gray-400">Try different keywords</p>
-          </div>
-        )}
+        {filteredPodcasts && filteredPodcasts.length > 0
+          ? filteredPodcasts.map((podcast) => (
+              <Link key={podcast.id} to={`/podcast/${podcast.id}`}>
+                <li
+                  data-testid={`podcast-card-${podcast.id}`}
+                  className="flex mt-32 bg-white hover:-translate-y-2 transition-all px-5 py-2 flex-col relative min-h-[180px] m-auto shadow-md w-[260px] rounded-sm items-center justify-center"
+                >
+                  <img
+                    className="m-auto w-28 absolute -top-20 left-1/2 transform -translate-x-1/2 rounded-full"
+                    src={podcast.image}
+                    alt={podcast.name}
+                  />
+                  <div className="text-center mt-10">
+                    <h2 className="uppercase font-medium">{podcast.name}</h2>
+                    <p className="text-gray-400">Author:{podcast.author}</p>
+                  </div>
+                </li>
+              </Link>
+            ))
+          : !loading && (
+              <div className="flex flex-col justify-center absolute left-1/2 transform -translate-x-1/2 items-center">
+                <p className="text-2xl font-bold">No results found</p>
+                <p className="text-gray-400">Try different keywords</p>
+              </div>
+            )}
       </ul>
     </div>
   );
