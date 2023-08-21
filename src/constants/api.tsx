@@ -1,4 +1,4 @@
 const apiBaseURL =
-  "https://cors-anywhere.herokuapp.com/https://itunes.apple.com/";
+  "https://cors-anywhere.herokuapp.com/https://itdunes.apple.com/";
 
 export default apiBaseURL;
