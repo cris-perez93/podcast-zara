@@ -51,3 +51,9 @@ npx cypress open
 ```
 3. Accede a la interfaz y elige el navegador donde se realizarán las pruebas.
 
+## Información General
+Servicios para poder acceder a recursos externos que no proveen JSONP ni
+cabeceras CORS:
+○ https://cors-anywhere.herokuapp.com/
+○ https://allorigins.win/
+
