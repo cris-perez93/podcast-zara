@@ -36,7 +36,7 @@ const CardComponent: React.FC<CardComponentProps> = ({
     <div className=" p-5 shadow-md  w-[300px] hover:shadow-xl translate-x-0">
       <Link to="/" className="flex flex-col items-center gap-7">
         <img
-          src={artworkUrl600}
+          src={artworkUrl600 || ""}
           width={200}
           onError={(e) => {
             e.currentTarget.src =

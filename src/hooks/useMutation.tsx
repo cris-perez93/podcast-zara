@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { useState } from "react";
 import apiBaseURL from "../constants/api";
+import { useNavigate } from "react-router-dom";
 
 type HttpMethod = "get" | "post" | "put" | "delete";
 
@@ -36,6 +37,7 @@ export const useMutation = (
   cleanBaseURL: boolean = false
 ): [(props: FetchProps) => Promise<ApiResponse>, { loading: boolean }] => {
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigate();
   const fetch = async ({
     method = "post",
     data,
@@ -93,6 +95,9 @@ export const useMutation = (
           success: false,
           error: error?.response?.data,
         };
+      }
+      if (status === 403) {
+        navigation("/403");
       }
 
       return {

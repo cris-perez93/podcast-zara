@@ -24,6 +24,25 @@ function App() {
                 element={<Layout>{route.element}</Layout>}
               />
             ))}
+            {/* Ruta para el error 403 */}
+            <Route
+              path="/403"
+              element={
+                <div>
+                  Forbidden, check cors demo for api:{" "}
+                  <a
+                    className="text-blue-500 underline"
+                    href="https://cors-anywhere.herokuapp.com/corsdemo"
+                  >
+                    Request temporary acces to the demo server and update the
+                    page to try again
+                  </a>
+                </div>
+              }
+            />
+
+            {/* Ruta para el error 404 */}
+            <Route path="*" element={<div>Element not found</div>} />
           </Routes>
         </Suspense>
       </Router>
