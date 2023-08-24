@@ -2,10 +2,11 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import EpisodeTableComponent from "./components/EpisodesTableComponent";
 import CardComponent from "./components/CardComponent";
-import { IEpisode } from "../../types/CommonTypes";
+import { IEpisode, IPodcast } from "../../types/CommonTypes";
 import Loading from "../../components/Loading";
 import usePodcastDetail from "./hooks/usePodcastDetail";
 import DetailEpisodeComponent from "./components/DetailEpisodeComponent";
+import { usePodcast } from "../../context/PodcastContext/PodcastContext";
 
 interface PodcastDetailProps {
   episodeDetail?: boolean;
@@ -19,21 +20,42 @@ const PodcastDetail = ({ episodeDetail }: PodcastDetailProps) => {
   const { id, episodeId } = useParams();
   const [currentEpisode, setCurrentEpisode] = useState({} as IEpisode);
 
+  const { setPodcastDetail } = usePodcast();
+
   const {
-    getPodcastDetail, // get the podcast detail
     podcastDetail, // podcast detail
     totalEpisodes, // total episodes of the podcast
     visibleEpisodes, // visible episodes of the podcast
     visibleCount, // visible count of the episodes
-    onLoadMoreEpisodes, // load more episodes
     loading, // loading state
+    listPodcastDetail, // list of podcast detail
+    onLoadMoreEpisodes, // load more episodes
+    getPodcastDetail, // get the podcast detail
+    setTotalEpisodes, // set the total episodes
+    setVisibleEpisodes, // set the visible episodes
   } = usePodcastDetail({ id: id as string });
 
   /**
-   * @description This effect is used to get the podcast detail
+   * @description This effect is used to get the podcast detail from the local storage or from the api.
    */
   useEffect(() => {
-    getPodcastDetail();
+    const currentTime = Date.now();
+    const podcastFromLocalStorage = listPodcastDetail.find(
+      (podcast: IPodcast) => podcast.id === parseFloat(id as string)
+    );
+    if (
+      !podcastFromLocalStorage ||
+      !podcastFromLocalStorage.lastFetchTime ||
+      currentTime - podcastFromLocalStorage.lastFetchTime > 24 * 60 * 60 * 1000
+    ) {
+      getPodcastDetail();
+    } else {
+      setPodcastDetail(podcastFromLocalStorage);
+      setTotalEpisodes(podcastFromLocalStorage.episodes.length);
+      setVisibleEpisodes(
+        podcastFromLocalStorage.episodes.slice(0, visibleCount)
+      );
+    }
   }, []);
 
   /**

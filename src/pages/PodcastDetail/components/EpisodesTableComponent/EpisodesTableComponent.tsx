@@ -52,7 +52,10 @@ const EpisodeTableComponent: React.FC<EpisodeTableProps> = ({
                 key={episode.id}
               >
                 <td className="p-3 border-b text-blue-400 hover:underline transition-all">
-                  <Link to={`/podcast/${podcastId}/episode/${episode.id}`}>
+                  <Link
+                    data-testid={"podcast-episodes-table-title"}
+                    to={`/podcast/${podcastId}/episode/${episode.id}`}
+                  >
                     {getCleanedTitle(episode.title)}
                   </Link>
                 </td>

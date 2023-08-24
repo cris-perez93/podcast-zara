@@ -37,10 +37,8 @@ it("debe mostrar los detalles del podcast", () => {
   // verificar que se muestra el título del episodio
   cy.get(
     '[data-testid="podcast-episodes-table"] tbody tr:first td:first'
-  ).should("contain", "BIG FACTS feat. ELDORADO RED");
-  // verificar que si le damos clic al título del episodio se navega a la página de detalles del episodio
-  cy.get(
-    '[data-testid="podcast-episodes-table"] tbody tr:first td:first'
-  ).click();
-  cy.url().should("include", "/podcast/1493353598/episode/1000624594388");
+  ).should("contain", "BIG FACTS feat. BIG HOMIIE G, HEAD & BIG 30");
+  // coger el primer elemento que tenga el data-testid="podcast-episodes-table-title"
+  cy.get("[data-testid='podcast-episodes-table-title']:first").click();
+  cy.url().should("include", "/podcast/1493353598/episode/1000625334115");
 });
