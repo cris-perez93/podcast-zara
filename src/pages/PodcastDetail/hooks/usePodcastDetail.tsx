@@ -20,6 +20,9 @@ const usePodcastDetail = ({ id }: usePodcastDetailProps) => {
   const [visibleEpisodes, setVisibleEpisodes] = useState([] as any[]);
   const [visibleCount, setVisibleCount] = useState(10); // Initial visible count
   const [fetchDetailPodcast, isLoading] = useMutation(`/lookup`);
+  const [listPodcastDetail, setListPodcastDetail] = useState<IPodcast[]>(
+    JSON.parse(localStorage.getItem("cachedListPodcastDetail") || "[]")
+  );
 
   // get the podcast detail
   const getPodcastDetail = async () => {
@@ -48,6 +51,15 @@ const usePodcastDetail = ({ id }: usePodcastDetailProps) => {
           };
         }),
       };
+      setListPodcastDetail([...listPodcastDetail, podcast]);
+      const dataPodcast = {
+        ...podcast,
+        lastFetchTime: Date.now(),
+      };
+      localStorage.setItem(
+        "cachedListPodcastDetail",
+        JSON.stringify([...listPodcastDetail, dataPodcast])
+      );
       setPodcastDetail(podcast);
       setTotalEpisodes(podcast.episodes.length);
       setVisibleEpisodes(podcast.episodes.slice(0, visibleCount));
@@ -67,7 +79,10 @@ const usePodcastDetail = ({ id }: usePodcastDetailProps) => {
     visibleCount,
     setVisibleCount,
     onLoadMoreEpisodes,
+    setTotalEpisodes,
+    setVisibleEpisodes,
     loading: isLoading.loading,
+    listPodcastDetail,
   };
 };
 
